@@ -10,11 +10,11 @@ public class Experssion {
 	
 	private String experssion;  //算术表达式字符串
 	
-	private List<Word> word; //存储表达式词法分析所得的单词与该单词�?对应的种别编码的集合
+	private List<Word> word; //存储表达式词法分析所得的单词与该单词所对应的种别编码的集合
 	
 	private int index;  //读取词法分析器的字符游标
 	
-	private int errorCode=0;  //表达式错误编�?
+	private int errorCode=0;  //表达式错误编码
 	
 	private int sym;  //单词种别编码
 	
@@ -24,16 +24,16 @@ public class Experssion {
 	}
 	
 	/**
-	 * 词法分析器：用于扫描表达式并处理得到该表达式的词�?
+	 * 词法分析器：用于扫描表达式并处理得到该表达式的词库
 	 * @param experssionStr  表达式字符串
 	 * @return
 	 */
 	public static List<Word> wordAnalysis(String experssionStr){
-		String expStrNoSpace=remove(experssionStr, ' '); //去除目标表达式中的空格字�?
+		String expStrNoSpace=remove(experssionStr, ' '); //去除目标表达式中的空格字符
 		char[] exChar=expStrNoSpace.toCharArray();
 		List<Word> word=new ArrayList<>();
 		for(int i=0;i<exChar.length;i++) {
-			//如果是操作符或�?�是括号
+			//如果是操作符或是括号,直接识别出来
 			if(exChar[i]=='+'||exChar[i]=='-'||exChar[i]=='*'||exChar[i]=='/'||exChar[i]=='('||exChar[i]==')') {
 				StringBuilder sb=new StringBuilder();
 				sb.append(exChar[i]);
@@ -84,7 +84,7 @@ public class Experssion {
 							}
 						}
 					}else {
-						System.out.println("词法错误�?");
+						System.out.println("词法错误!");
 						System.exit(0);
 					}
 				}
@@ -143,7 +143,7 @@ public class Experssion {
 							}
 						}
 					}else {
-						System.out.println("词法错误�?");
+						System.out.println("词法错误!");
 						System.exit(0);
 					}
 				}
@@ -177,7 +177,7 @@ public class Experssion {
 				}
 			}
 			else {
-				System.out.println("词法错误�?");
+				System.out.println("词法错误!");
 				System.exit(0);
 			}
 		}
@@ -199,7 +199,7 @@ public class Experssion {
 		errorCode=0;
 		sym=0;
 		index=0;
-		//上述三条语句在进行表达式的合法�?�检测之前还原表达式的初始状态：原因表达式调用一次判断之后不会还原上述三个参�?
+		//上述三条语句在进行表达式的合法检测之前还原表达式的初始状态：原因表达式调用一次判断之后不会还原上述三个参数
 		next();
 		E();
 		return sym==0&&errorCode==0;
@@ -215,10 +215,10 @@ public class Experssion {
 	}
 	
 	/**
-	 * 算数表达式的文法规则G(E)�?
-	 *   E �? E+T | E-T | T 
-	 *	 T �? T*F | T/F | F 
-	 *	 F �? (E) | d
+	 * 算数表达式的文法规则G(E)：
+	 *   E -> E+T | E-T | T 
+	 *	 T ->T*F | T/F | F 
+	 *	 F -> (E) | d
 	 */
 	private void E() {
 		T();
@@ -286,7 +286,7 @@ public class Experssion {
 	}
 	
 	/**
-	 * 只提供get方法，返回Expression表达式对应的词法分析�?识别的结�?
+	 * 只提供get方法，返回Expression表达式对应的词法分析器识别的结果
 	 * @return
 	 */
 	public List<Word> getWord() {
@@ -294,14 +294,14 @@ public class Experssion {
 	}
 	
 	/**
-	 * 只提供get方法，用于返回表达式是否有误的编�?   0为没有错�? -1为表达式有误
+	 * 只提供get方法，用于返回表达式是否有误的编码  0为没有错 -1为表达式有误
 	 */
 	public int getErrorCode() {
 		return errorCode;
 	}
 	
 	/**
-	 * 只提供get方法，用于返回表达式词法分析器中识别出的单词的种别编�?
+	 * 只提供get方法，用于返回表达式词法分析器中识别出的单词的种别编码
 	 * @return
 	 */
 	public int getSym() {
@@ -315,7 +315,7 @@ public class Experssion {
 	}
 
 	/*
-	 * 根据种别编码获取运算符的优先�?
+	 * 根据种别编码获取运算符的优先级
 	 */
 	private static int piror(int sym) {
 		switch (sym) {
@@ -347,7 +347,7 @@ public class Experssion {
 	}
 	
 	private static boolean isNumber(int sym) {
-		if(sym==5) { //单词种别编码�?5时表明该单词是一个操作数，返回true
+		if(sym==5) { //单词种别编码为5时表明该单词是一个操作数，返回true
 			return true;
 		}
 		return false;
@@ -355,12 +355,12 @@ public class Experssion {
 	
 	
 	/**
-	 * 中缀表达式转后缀表达�?
+	 * 中缀表达式转后缀表达式
 	 * @param midfix
 	 * @return
 	 */
 	public static List<Word> getPostfix(Experssion expression){
-		List<Word> midfix=expression.getWord();  //获取中缀表达式的经过词法分析器分析的结果�?
+		List<Word> midfix=expression.getWord();  //获取中缀表达式的经过词法分析器分析的结果集
 		List<Word> result=new ArrayList<>();   //存储后缀表达式结果的List集合
 		Stack<Word> operationStack=new Stack<>();  //操作符栈
 		
@@ -368,30 +368,30 @@ public class Experssion {
 			for(int i=0;i<midfix.size();i++) {
 				Word currentWord=midfix.get(i);  //获取当前单词
 				if(isOperation(currentWord.code)) {
-					//如果操作符栈不为空且操作符栈的栈顶元素是操作符并且操作符栈顶的运算级别高于当前操作符的运算级�?
+					//如果操作符栈不为空且操作符栈的栈顶元素是操作符并且操作符栈顶的运算级别高于当前操作符的运算级别
 					while(!operationStack.isEmpty()&&isOperation(operationStack.peek().code)&&piror(operationStack.peek().code)>=piror(currentWord.code)) {
-						result.add(operationStack.peek());  //将操作符栈顶元素添加到后�?表达式List�?
-						operationStack.pop();  //操作符栈顶元素出�?
+						result.add(operationStack.peek());  //将操作符栈顶元素添加到后缀表达式List中
+						operationStack.pop();  //操作符栈顶元素出栈
 					}
-					operationStack.push(currentWord);  //当前操作符入�?
-				}else if(currentWord.code.equals(6)) {  //如果当前单词是左括号 无条件入�?
+					operationStack.push(currentWord);  //当前操作符入栈
+				}else if(currentWord.code.equals(6)) {  //如果当前单词是左括号 无条件入栈
 					operationStack.push(currentWord);
 				}else if(currentWord.code.equals(7)) {//当前单词是右括号 将操作符栈中的左括号以前的操作符出栈
 					while(!operationStack.peek().code.equals(6)) { //如果栈顶操作符不是左括号
-						result.add(operationStack.peek()); //栈顶操作符加入后�?表达式List�?
-						operationStack.pop();  //栈顶操作符出�?
+						result.add(operationStack.peek()); //栈顶操作符加入后缀表达式List中
+						operationStack.pop();  //栈顶操作符出栈
 					}
-					operationStack.pop(); //当前操作符入�?
+					operationStack.pop(); //当前操作符入栈
 				}else {
-					result.add(currentWord); //当前单词不是操作符，即数字直接加入到后缀表达式的List�?
+					result.add(currentWord); //当前单词不是操作符，即数字直接加入到后缀表达式的List中
 				}
 			}
-			//中缀表达式链表元素遍历完毕，�?要将栈中元素依次出栈加入到后�?表达式List�?
+			//中缀表达式链表元素遍历完毕，需要将栈中元素依次出栈加入到后缀表达式List中
 			while(!operationStack.isEmpty()) {
 				result.add(operationStack.peek());
 				operationStack.pop();
 			}
-		}else {//不是正确的表达式，给出提示信�?
+		}else {//不是正确的表达式，给出提示信息
 			System.out.println("表达式有误！");
 		}
 		return result;
@@ -403,7 +403,7 @@ public class Experssion {
 	 * @return
 	 */
 	public static BigDecimal expCalculate(Experssion experssion) {
-		List<Word> postfix=getPostfix(experssion);  //获取表达式的后缀表达�?
+		List<Word> postfix=getPostfix(experssion);  //获取表达式的后缀表达式
 		Stack<BigDecimal> result=new Stack<>();  //操作数栈
 		if(postfix!=null&&postfix.size()>0) {
 			for(int i=0;i<postfix.size();i++) {
